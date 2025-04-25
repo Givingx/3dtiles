@@ -1,6 +1,7 @@
 name: Ubuntu
 
 on: [push]
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -16,6 +17,12 @@ jobs:
 
     - name: Build
       run: cargo build --verbose --release
-    
+
     - name: Test
       run: cargo test --verbose
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: my-release-binary
+        path: target/release/3dtiles

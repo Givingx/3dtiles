@@ -3,14 +3,13 @@ name: Ubuntu
 on: [push]
 
 jobs:
-  build-and-test:
+  build-and-package:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
 
     - name: Install dependencies on Ubuntu
-      if: runner.os == 'Linux'
       run: |
         sudo apt-get update
         sudo apt-get install -y g++ libgdal-dev libopenscenegraph-dev
@@ -21,8 +20,15 @@ jobs:
     - name: Test
       run: cargo test --verbose
 
-    - name: Upload build artifact
+    - name: Package binary with shared libs
+      run: |
+        mkdir -p package
+        cp target/release/你的程序名 package/
+        # 拷贝依赖的共享库
+        ldd target/release/你的程序名 | grep "=> /" | awk '{print $3}' | xargs -I '{}' cp -v '{}' package/
+
+    - name: Upload Linux package
       uses: actions/upload-artifact@v4
       with:
-        name: my-release-binary
-        path: target/release/
+        name: linux-package
+        path: package/

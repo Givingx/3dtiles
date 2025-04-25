@@ -23,9 +23,9 @@ jobs:
     - name: Package binary with shared libs
       run: |
         mkdir -p package
-        cp target/release/你的程序名 package/
+        cp target/release/_3dtile package/
         # 拷贝依赖的共享库
-        ldd target/release/你的程序名 | grep "=> /" | awk '{print $3}' | xargs -I '{}' cp -v '{}' package/
+        ldd target/release/_3dtile | grep "=> /" | awk '{print $3}' | xargs -I '{}' cp -v '{}' package/
 
     - name: Upload Linux package
       uses: actions/upload-artifact@v4
